@@ -1,0 +1,39 @@
+agent: chatgpt
+Details:
+
+I first tried to get the top 3 numbers for the number of retweets, 
+and use that to filter rows from retweets. 
+Figured out how to select the first 3 entries of a column using Limit 3, suggested by chatgpt
+
+SELECT t.writer, t.tdate, t.ttime, t.rcount
+FROM 
+    (SELECT DISTINCT count(*) as rcount
+    FROM retweets
+    GROUP BY writer, tdate, ttime
+    ORDER BY count(*) DESC
+    LIMIT 3) s,
+    (SELECT writer, tdate, ttime, count(*) as rcount
+    FROM retweets
+    GROUP BY writer, tdate, ttime
+    ORDER BY count(*) DESC) t
+WHERE s.rcount = t.rcount;
+
+This turned out to be the wrong approach as it would return too many tweets. 
+Say I had 2 tweets ranked first, 4 ranked second, and 5 ranked third, it would return all 11 instead of just the 6 ranked first and second.
+
+I came up with another approach to add the tweets iteratively.
+chatgpt prompt: 
+    is there a way to do it where I first get the top ranked tweets, if that does not exceed 3, 
+    then add the second ranked tweets, and if that does not exceed 3 then finally add the third ranked tweets
+
+The implementation was to first define a temporary relation RankedTweets using the WITH clause, that selects the writer, date time, and text (using the tweets relation to get the text) of the retweet,
+and it's rank (first most retweeted, second, etc.) using the RANK() function.
+
+We then define another temporary relation TopRankedTweets that is the union of 3 queries. 
+The first query gets all tweets ranked first, the second gets all tweets ranked second only if the ones ranked first are less than 3,
+the third gets all tweets ranked third only if the ones ranked first and second are less than 3.
+The number of tweets in each rank is found using a subquery on RankedTweets by counting the rows with a specific rank number (1,2,3)
+-> I later simplified this to just one select statement that tests for the three conditions
+
+Finally, we select the writer, the date, the time, and the text of each tweet from the TopRankedTweets relation.
+

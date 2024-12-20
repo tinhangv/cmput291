@@ -1,0 +1,18 @@
+agent: NA
+Details:
+
+I split this into the union of 2 sets
+    In the first set I find the users with the most followers
+    In the second set I find the top user in average retweet times
+
+To do that I defined two sets in a common table expression:
+    RankedUserFlwers: 
+        I used the approach in question 6 to rank the users based on number of followers
+    AveRetCnt:
+        I first get a set with the number of times each tweet has been retweeted, and the user who made the tweet
+        I then group this set by the writer and select the average number of times a tweet made by that user is retweeted
+
+To select the top user(s) in followers I select the users ranked 1 in RankedUserFlwers
+To select the top user in average retweet times I get the rows in AveRetCnt with maximum average retweets
+
+I return the union of these two sets

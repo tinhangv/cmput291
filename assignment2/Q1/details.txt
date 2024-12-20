@@ -1,0 +1,12 @@
+agent: NA
+Details:
+
+
+This is the same as finding the intersection of
+    users who have at least 1 follower, 
+    and users with least 1 tweet included in a favorites list.
+
+the id's of users who have followrs will be on the flwee column on follows, so we select all flwees from follows
+the id's of users who have a tweet in someone's favourites list will be on the writer column on includes, so we select all writers from includes
+
+the answer is the intersection of these two sets

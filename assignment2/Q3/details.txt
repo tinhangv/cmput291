@@ -1,0 +1,22 @@
+agent: NA
+Details:
+
+I split the query into:
+    The set of users who have at least three different tweets that mention Edmonton in tweet text 
+    minus
+    the set of users who have followers
+
+set 1 except set 2
+
+For the first set:
+Without using aggregation, grouping, and nesting, we cannot simply use the count function to get the count of tweets, grouped by users
+
+The workaround is specify the tweets relation 3 times in the FROM clause
+In the where clause we restrict the rows so that:
+    the writer in all 3 tweet tables are the same user, and
+    all 3 tweets mention edmonton (includes the substring 'edmonton'), but
+    the 3 tweets are different (they have different texts)
+
+For the second set:
+simply select all flwees from follows, since the follows table records all following relationships
+

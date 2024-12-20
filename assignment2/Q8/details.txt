@@ -1,0 +1,28 @@
+agent: NA
+Details:
+
+Since the number of tweets in each month is not related to the number of retweets in each month, 
+I used common table expressions to define two seperate result sets
+The month and year of a date can be found using the strftime function 
+Using the year I can restrict the rows to those with dates in 2024
+
+in the common table expression:
+for the first set (u)
+    I get the month, number of null replies, and number of replies in each month
+    using the tweets table
+    since the aggregates are calculated for each month, I group by month
+    replies are tweets with non-null reply fields
+    to get the number of replies, use count on one of the reply fields. This counts the rows with non-null fields
+    to get the null fields, use count(*) to get the total number of rows and subtract that by the number of replies
+
+for the second set (v)
+    I get the total number of retweets made in each month
+
+In the main query
+    I need to left join u and v using the month, since all months in u need to be in the result
+    Some entries in v may be null, if retweets are not made in that month, in which case we should return 0 instead
+        for the retweets in that month. To convert to 0 if null, use the coalesce function
+    
+    finally return the counts grouped by month
+
+

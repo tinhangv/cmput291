@@ -1,0 +1,20 @@
+agent: NA
+Details:
+
+We have users u1, u2, and john doe, where
+u1 follows u2, and       f1: (flwer = u1, flwee =u2)
+john doe follows u2      f2: (flwer = 'john doe', flwee =u2)
+
+since there are two following relationships, we need to put the follows relation twice in the FROM clause
+user is also listed on the FROM clause so we can get the id of u2
+
+To get the time of the tweet from now, I use the julianday function, which converts a date to a decimal value. 
+This allows the comparison of two dates by finding the difference in their julianday values.
+
+In the where clause I restrict the rows to match the 4 conditions:
+    u1 followed by u2 for at least 90 days
+    the flwee in f1 and f2 are both u2 -> so u1 and john doe both follow u2
+    john doe is the flwer in f2
+    user 2 followed by john doe for less than 90 days
+
+the desired users are users u1 satisfying the conditions, whos id can be obtained using the users relation

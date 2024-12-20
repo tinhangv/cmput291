@@ -1,0 +1,16 @@
+agent: chatgpt
+Details:
+
+Used chatgpt to figure out how to join multiple tables.
+
+My idea was to use 3 different sets:
+    one for getting the number of replies to each tweet
+    one for getting the number of times the tweet is retweeted
+    one for getting the number of tweets mentioning the same hashtag
+
+Since all three sets may have missing rows and not include all tweets, I also make a set of all tweets
+
+I then left join the 3 sets onto the set of all tweets, so that I get one single set with the counts for
+    number of replies, number of times retweeted, and number of tweets mentioning the same hashtag
+
+Since some of the counts may be null on the resulting set, I use the coalesce function to turn null values to 0

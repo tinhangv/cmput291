@@ -1,0 +1,16 @@
+agent: NA
+Details:
+
+I find the set of list with more three tweets and intersect it with the set of lists where 50% of tweets have been retweeted
+
+To find lists with more than 3 tweets, group the includes table by list names, and count the number of rows in each group, and exclude each group that has less than or equal to 3 rows
+
+To find the set of lists where at least 50% of tweets have been retweeted, 
+    we need to find lists where the number of retweeted tweets / number of tweets > 0.5
+    This can be done by left joining the includes and retweets table based on tweets
+    so that if a tweet doesn't have a retweet, the retweet attributes will be null
+    group the rows by list names so that we can perform aggregation on each seperate list
+    we take advantage of the fact that count(*) counts all rows, even ones with null values, but count(attribute) only counts non null rows
+    each tweet is only retweeted if the atttibutes in the retweets columns are not null
+    therefore the expression count(r.retweeter)/count(*) gives the ratio needed to apply the restriction of 50% retweet rate
+    

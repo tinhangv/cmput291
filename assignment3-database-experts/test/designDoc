@@ -1,0 +1,132 @@
+System overview & User Guide:
+
+This program is a mockup of a Twitter application. Users can perform some of the 
+actions found on twitter, such as the making and searching of accounts and tweets, following users,
+and other such functions. Load up the database and follow the on-screen instructions to traverse
+the application.
+
+Start application:
+    -enter database file name
+Login Screen:
+    -options: signup, login or exit program
+        -go to main menu after logging in
+
+Main menu: 
+    -options: 
+        1,search for tweets
+        2,serach for users
+        3,compose a tweet
+        4,list followers
+        5,logout
+
+1,search for tweets
+    new search
+    -enter keyword(s)
+    -list 5 tweets with keyword
+    -options: select tweet, return to main menu
+        select tweet:
+            options: compose reply or retweet
+
+2,search for users
+    new search
+    -enter keyword (1)
+    -list users with name containing keyword (<=5)
+        -(userid, username) in ascending order by length
+        select user: 
+            -display #tweets, #following, #followers, 3 most recent tweets
+            -options: follow, see more tweets
+
+3, compose a tweet
+    -enter the tweet
+
+4, list followers
+    -list users following (5)
+    -options: list 5 more, select follower, back to main
+        select follower:
+            -display #tweets, #following, #followers, 3 most recent tweets
+            -options: follow, see more tweets
+
+5, logout
+    -return to login screen
+
+Software Design & Components:
+
+Primary Functions:
+    main(), signup(), login(), actions(usr), tweet_search(usr), select_tweet(uid, tid), user_search(usr), select_user(u1, u2), send_tweet(usr, replyto_tid=None), follower_list(usr)
+Secondary Functions:
+    connect(path), get_flwer_tweets(usr), get_searched_tweets(keyword_list), retweet(uid, tid), follow_usr(u1,u2), print_5_rows(table, start_index, numbered=False)
+
+Description of primary functions:
+    main()
+        calls connect(path) to connect to the database
+        runs loop for the login screen until user exits the program
+            user inputs:
+                1: calls signup()
+                2: calls login()
+                3: exits program
+
+    signup()
+        requests user input for:
+            name, email, phone, password
+        inserts a new user into the users table, "logs in" by calling actions(user_id) 
+
+    login()
+        requests user input for:
+            user_id, password 
+        checks if there is a match in the database
+        "logs in" by calling actions()
+
+    actions(usr)
+        is called after successful login from login() or signup()
+        lists the tweets and retweets of followed users obtained from get_flwer_tweets(usr)
+        runs a loop that requests user input for the next action until user "logs out"
+            user input:
+                1: calls ACTION 1: tweet_search()
+                2: calls ACTION 2: user_search()
+                3: calls ACTION 2: user_search()
+                4: calls ACTION 2: user_search()
+                5: ACTION 5: logs out by exiting form actions() and returning to login screen in main()
+                6: see more tweets of followed users, only appears if there are more tweets
+                7: go back to the top of the homepage, showing the most recent tweets
+
+    tweet_search()
+        handler for ACTION 1
+        requests user input for:
+            keywords: a string comma seperated keywords
+        calls get_searched_tweets() to get a list of tweets containing keywords
+        exits the function if no tweets are found
+        if tweets found: runs a loop for the next action 
+            user input:
+                1 - (number of tweets printed): select a tweet from the list of tweets printed (5 or less), calls select_tweet()
+                6: back to actions()
+                7: see more tweets, only appears if there are more tweets
+
+    select_tweet(tid)
+    user_search()
+    select_user(u1,u2)
+    send_tweet(usr, replyto_tid=None)
+    follower_list(usr)
+
+Testing Strategy:
+
+Created new test database with more entries to test if various aspects of the application worked correctly, such as
+the many parts of the application where a list is printed in several parts.
+
+Test scenarios involved performing various actions within the application and ensuring the program behaves as expected. These include:
+-Following a user and then returning to the main menu
+-Performing various actions (making tweets, following users) before logging out & logging back in
+-Viewing tweets and followers when there are more than 5 entries to be shown
+-Testing various search queries in the different search funcitons
+
+The test cases performed should theoretically cover any series of actions a user might perform in the application.
+
+Bugs found:
+-around 3 instances of incorrect SQL queries causing issues within the application
+-3+ instances of needing to account for incorrect user input
+-some modifications to match project specifications
+-occasional typos and print spacing issues
+
+
+Group Work Break-Down Strategy:
+(time spent, progress, coordination)
+...

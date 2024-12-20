@@ -1,0 +1,24 @@
+agent: NA
+Details:
+
+I first drew a diagram showing the relation between the user, the tweet, the users who retweeted the tweet, and the retweeters who follow the user
+
+                retweet
+user ->  tweet  --> user  --
+|                -->        | 
+|                ...        |-> count >3
+|                -->       _|
+|________________________|
+        follows                    
+
+The relations in the diagram are tweets, retweets, follows
+
+
+Every user who has a tweet is in the writer column of tweets
+
+the writer of the original tweet is a follower of the retweeter (follows relationship), and 
+the original tweet in the tweet relation is equal to the retweeted tweet in the retweet relation
+
+I group the tuples by the specific tweet, so that the number of distinct followers for each tweet can be found
+
+finally, only output the tweets that are retweeted by more than 3 followers (having clause applies condition to each tweet seperately)

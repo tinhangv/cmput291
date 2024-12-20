@@ -1,0 +1,16 @@
+agent: NA
+Details:
+
+This is equivalent to the intersection of the sets of:
+    1, users who have no tweets, and 
+    2, users who follow every user followed by John Doe
+
+1, this is the same as finding users who are not in the set of {users who have tweets}
+
+2, This is a statement of the form
+    "Find the subset of items in one set that are related to all items in another set"
+
+    This can be done using division. I used the approach given in the slides.
+    output u1 if B-A is empty (B is a subset of A), where 
+    B = all users followed by JD
+    A = all users followed by a particular user u1

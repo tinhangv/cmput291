@@ -1,0 +1,81 @@
+CREATE TABLE Employees_Work_Supervise(
+	Supervised_EID INTEGER,
+	Supervisor_EID INTEGER NOT NULL,
+	Name VARCHAR(70),
+	Address VARCHAR(255),
+	Role VARCHAR(50),
+	Fac_ID INTEGER NOT NULL,
+	PRIMARY KEY (Supervisor_EID, Supervised_EID),
+	FOREIGN KEY (Supervisor_EID) REFERENCES Employees_Work_Supervise(Supervisor_EID) ON DELETE NO ACTION,
+	FOREIGN KEY (Supervised_EID) REFERENCES Employees_Work_Supervise(Supervised_EID),
+	FOREIGN KEY (Fac_ID) REFERENCES Facilities_Manage(Fac_ID) ON DELETE NO ACTION
+);
+
+CREATE TABLE Facilities_Manage(
+	Fac_ID INTEGER,
+	Address VARCHAR(255),
+	City VARCHAR(20),
+	Supervised_EID INTEGER NOT NULL,
+	PRIMARY KEY (Fac_ID),
+	FOREIGN KEY (Supervised_EID) REFERENCES Employees_Work_Supervise(Supervised_EID) ON DELETE NO ACTION
+);
+
+CREATE TABLE Enter(
+	Fac_ID INTEGER,
+	Track_Num VARCHAR(40),
+	Entry_Time DATETIME,
+	Next_Fac_ID INTEGER,
+	PRIMARY KEY (Fac_ID, Track_Num),
+	FOREIGN KEY (Fac_ID) REFERENCES Facilities_Manage(Fac_ID),
+	FOREIGN KEY (Track_Num) REFERENCES Parcels(Track_Num)
+);
+
+CREATE TABLE Exit(
+	Fac_ID INTEGER,
+	Track_Num VARCHAR(40),
+	Exit_Time DATETIME,
+	Transportation VARCHAR(50),
+	PRIMARY KEY (Fac_ID, Track_Num),
+	FOREIGN KEY (Fac_ID) REFERENCES Facilities_Manage(Fac_ID),
+	FOREIGN KEY (Track_Num) REFERENCES Parcels(Track_Num)
+);
+
+CREATE TABLE Parcels(
+	Track_Num VARCHAR(40),
+	Delivery_Address VARCHAR(255),
+	Drop_time DATETIME,
+	Weight DECIMAL(10,2),
+	PRIMARY KEY (Track_Num)
+);
+
+CREATE TABLE Parcels_Good(
+	Track_Num VARCHAR(40) NOT NULL,
+	Good VARCHAR(100),
+	PRIMARY KEY (Track_Num, Good),
+	FOREIGN KEY (Track_Num) REFERENCES Parcels(Track_Num) ON DELETE CASCADE
+);
+
+CREATE TABLE Attempt_Deliver(
+	Delivery_time DATETIME,
+	Driver VARCHAR(70),
+	Status VARCHAR(50),
+	Feedback TEXT,
+	Track_Num VARCHAR(40) NOT NULL,
+	PRIMARY KEY (Delivery_time, Track_Num),
+	FOREIGN KEY (Track_Num) REFERENCES Parcels(Track_Num) ON DELETE CASCADE
+);
+
+CREATE TABLE Regular_Parcels(
+	Track_Num VARCHAR(40) NOT NULL,
+	PRIMARY KEY (Track_Num),
+	FOREIGN KEY (Track_Num) REFERENCES Parcels(Track_Num) ON DELETE CASCADE
+);
+
+CREATE TABLE Expedited_Parcels(
+	Track_Num VARCHAR(40) NOT NULL,
+	Date DATE,
+	Country VARCHAR(50),
+	Total_value DECIMAL(10,2),
+	PRIMARY KEY (Track_Num),
+	FOREIGN KEY (Track_Num) REFERENCES Parcels(Track_Num) ON DELETE CASCADE
+);
